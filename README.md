@@ -8,6 +8,7 @@
 
 ## 📋 Содержание
 
+- [Быстрый старт](#быстрый-старт)
 - [Что делает скилл](#что-делает-скилл)
 - [Установка по платформам](#установка-по-платформам)
   - [Claude Code / Claude.ai](#claude-code--claudeai)
@@ -19,6 +20,37 @@
   - [Другие агенты](#другие-агенты)
 - [Универсальный способ](#универсальный-способ)
 - [Структура файлов](#структура-файлов)
+
+---
+
+## Быстрый старт
+
+### Вариант 1: Клонирование репозитория
+
+```bash
+git clone https://github.com/nikitaCodeSave/writing-clearly.git
+cd writing-clearly
+```
+
+Все команды ниже выполняются из этой директории.
+
+### Вариант 2: Скачать только нужные файлы
+
+Если не хочешь клонировать весь репозиторий:
+
+```bash
+# Создай директорию и скачай файлы
+mkdir -p writing-clearly/references
+curl -Lo writing-clearly/SKILL.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md
+curl -Lo writing-clearly/references/style-guide.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
+```
+
+### Вариант 3: Однострочник для Claude Code
+
+```bash
+# Персональная установка (для всех проектов)
+mkdir -p ~/.claude/skills/writing-clearly/references && curl -Lo ~/.claude/skills/writing-clearly/SKILL.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md && curl -Lo ~/.claude/skills/writing-clearly/references/style-guide.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
+```
 
 ---
 
@@ -48,6 +80,8 @@
 
 Скилл использует формат [Agent Skills](https://agentskills.io) — открытый стандарт для AI-агентов.
 
+> **Примечание:** Команды ниже предполагают, что ты находишься в корне склонированного репозитория (`cd writing-clearly` после клонирования).
+
 #### Персональный скилл (для всех проектов)
 
 ```bash
@@ -58,10 +92,22 @@ cp writing-clearly/references/style-guide.md ~/.claude/skills/writing-clearly/re
 
 #### Проектный скилл (для команды)
 
+Перейди в корень своего проекта и выполни:
+
 ```bash
 mkdir -p .claude/skills/writing-clearly/references
-cp writing-clearly/SKILL.md .claude/skills/writing-clearly/
-cp writing-clearly/references/style-guide.md .claude/skills/writing-clearly/references/
+cp /путь/к/writing-clearly/writing-clearly/SKILL.md .claude/skills/writing-clearly/
+cp /путь/к/writing-clearly/writing-clearly/references/style-guide.md .claude/skills/writing-clearly/references/
+git add .claude/
+git commit -m "Добавлен скилл ясного письма"
+```
+
+Или используй curl (не нужно клонировать репо):
+
+```bash
+mkdir -p .claude/skills/writing-clearly/references
+curl -Lo .claude/skills/writing-clearly/SKILL.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md
+curl -Lo .claude/skills/writing-clearly/references/style-guide.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
 git add .claude/
 git commit -m "Добавлен скилл ясного письма"
 ```
@@ -76,32 +122,38 @@ Cursor поддерживает несколько способов добавл
 
 #### Способ 1: Файл .cursorrules (legacy, но работает)
 
-Создай файл `.cursorrules` в корне проекта:
+Создай файл `.cursorrules` в корне своего проекта:
 
 ```bash
-cp writing-clearly/references/style-guide.md .cursorrules
+# Из склонированного репо
+cp writing-clearly/references/style-guide.md /путь/к/твоему/проекту/.cursorrules
+
+# Или через curl (в корне твоего проекта)
+curl -Lo .cursorrules https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
 ```
 
 #### Способ 2: Директория .cursor/rules/ (рекомендуется)
 
+В корне твоего проекта:
+
 ```bash
 mkdir -p .cursor/rules
-cp writing-clearly/SKILL.md .cursor/rules/writing-clearly.mdc
+curl -Lo .cursor/rules/writing-clearly.mdc https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md
 ```
 
 #### Способ 3: Глобальные настройки
 
 1. Открой `Cursor -> Settings -> Cursor Settings -> Rules for AI`
-2. Вставь содержимое `style-guide.md`
+2. Скопируй содержимое [style-guide.md](https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md)
 
 #### Способ 4: Agent Skills (если поддерживается)
 
-Cursor поддерживает формат Agent Skills:
+В корне твоего проекта:
 
 ```bash
 mkdir -p .cursor/skills/writing-clearly/references
-cp writing-clearly/SKILL.md .cursor/skills/writing-clearly/
-cp writing-clearly/references/style-guide.md .cursor/skills/writing-clearly/references/
+curl -Lo .cursor/skills/writing-clearly/SKILL.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md
+curl -Lo .cursor/skills/writing-clearly/references/style-guide.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
 ```
 
 ---
@@ -114,18 +166,33 @@ Gemini CLI использует файлы `GEMINI.md` для контекста
 
 ```bash
 mkdir -p ~/.gemini
+# Из склонированного репо (из корня writing-clearly/)
 cat writing-clearly/SKILL.md writing-clearly/references/style-guide.md > ~/.gemini/GEMINI.md
+
+# Или через curl
+{ curl -sL https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md; echo; curl -sL https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md; } > ~/.gemini/GEMINI.md
 ```
 
 #### Проектный контекст
 
+В корне твоего проекта:
+
 ```bash
-cat writing-clearly/SKILL.md writing-clearly/references/style-guide.md > GEMINI.md
+# Через curl (рекомендуется)
+{ curl -sL https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md; echo; curl -sL https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md; } > GEMINI.md
 ```
 
 #### Модульный подход с импортами
 
-Создай `GEMINI.md` в корне проекта:
+Сначала скачай файлы в свой проект:
+
+```bash
+mkdir -p writing-clearly/references
+curl -Lo writing-clearly/SKILL.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md
+curl -Lo writing-clearly/references/style-guide.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
+```
+
+Затем создай `GEMINI.md` в корне проекта:
 
 ```markdown
 # Контекст проекта
@@ -144,33 +211,36 @@ Codex поддерживает два формата: `AGENTS.md` и Agent Skill
 
 #### Способ 1: AGENTS.md
 
+В корне твоего проекта:
+
 ```bash
-cat writing-clearly/SKILL.md writing-clearly/references/style-guide.md > AGENTS.md
+# Через curl
+{ curl -sL https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md; echo; curl -sL https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md; } > AGENTS.md
 ```
 
-Или добавь в глобальный конфиг:
+Глобальный конфиг:
 
 ```bash
 mkdir -p ~/.codex
-cat writing-clearly/SKILL.md writing-clearly/references/style-guide.md > ~/.codex/AGENTS.md
+{ curl -sL https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md; echo; curl -sL https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md; } > ~/.codex/AGENTS.md
 ```
 
 #### Способ 2: Agent Skills (рекомендуется)
 
-Codex поддерживает формат Agent Skills:
+Глобальная установка:
 
 ```bash
 mkdir -p ~/.codex/skills/writing-clearly/references
-cp writing-clearly/SKILL.md ~/.codex/skills/writing-clearly/
-cp writing-clearly/references/style-guide.md ~/.codex/skills/writing-clearly/references/
+curl -Lo ~/.codex/skills/writing-clearly/SKILL.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md
+curl -Lo ~/.codex/skills/writing-clearly/references/style-guide.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
 ```
 
-Или для проекта:
+Для проекта (в корне твоего проекта):
 
 ```bash
 mkdir -p .codex/skills/writing-clearly/references
-cp writing-clearly/SKILL.md .codex/skills/writing-clearly/
-cp writing-clearly/references/style-guide.md .codex/skills/writing-clearly/references/
+curl -Lo .codex/skills/writing-clearly/SKILL.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md
+curl -Lo .codex/skills/writing-clearly/references/style-guide.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
 ```
 
 ---
@@ -183,20 +253,20 @@ Antigravity использует Rules и Workflows.
 
 1. Нажми `...` в правом верхнем углу
 2. Выбери `Customizations` → `Rules`
-3. Создай новое правило и вставь содержимое `style-guide.md`
+3. Скопируй содержимое [style-guide.md](https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md)
 
 #### Через файлы
 
 Глобальные правила:
 ```bash
 mkdir -p ~/.antigravity
-cp writing-clearly/references/style-guide.md ~/.antigravity/rules.md
+curl -Lo ~/.antigravity/rules.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
 ```
 
-Проектные правила:
+Проектные правила (в корне твоего проекта):
 ```bash
 mkdir -p .antigravity
-cp writing-clearly/references/style-guide.md .antigravity/rules.md
+curl -Lo .antigravity/rules.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
 ```
 
 ---
@@ -206,12 +276,12 @@ cp writing-clearly/references/style-guide.md .antigravity/rules.md
 VS Code с GitHub Copilot поддерживает Agent Skills (в preview).
 
 1. Включи `chat.useAgentSkills` в настройках VS Code
-2. Создай структуру:
+2. В корне твоего проекта выполни:
 
 ```bash
 mkdir -p .github/skills/writing-clearly/references
-cp writing-clearly/SKILL.md .github/skills/writing-clearly/
-cp writing-clearly/references/style-guide.md .github/skills/writing-clearly/references/
+curl -Lo .github/skills/writing-clearly/SKILL.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/SKILL.md
+curl -Lo .github/skills/writing-clearly/references/style-guide.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
 ```
 
 ---
@@ -220,21 +290,30 @@ cp writing-clearly/references/style-guide.md .github/skills/writing-clearly/refe
 
 #### Windsurf
 
-Windsurf использует похожий на Cursor формат:
+В корне твоего проекта:
 
 ```bash
-cp writing-clearly/references/style-guide.md .windsurfrules
+curl -Lo .windsurfrules https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
 ```
 
 #### Continue.dev
 
+В корне твоего проекта:
+
 ```bash
-cp writing-clearly/references/style-guide.md .continuerules
+curl -Lo .continuerules https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
 ```
 
 #### Aider
 
-Создай файл `.aider.conf.yml`:
+Сначала скачай файл:
+
+```bash
+mkdir -p writing-clearly/references
+curl -Lo writing-clearly/references/style-guide.md https://raw.githubusercontent.com/nikitaCodeSave/writing-clearly/main/writing-clearly/references/style-guide.md
+```
+
+Затем создай файл `.aider.conf.yml`:
 
 ```yaml
 read:
@@ -263,14 +342,20 @@ aider --read writing-clearly/references/style-guide.md
 
 ## Структура файлов
 
+После клонирования репозитория:
+
 ```
-writing-clearly/
-├── SKILL.md                    # Основной файл (~60 строк)
-│                               # Краткая памятка и workflow
-└── references/
-    └── style-guide.md          # Подробные правила (~250 строк)
-                                # Таблицы замен, примеры, чек-лист
+writing-clearly/              # Корень репозитория (после git clone)
+├── README.md                 # Этот файл с инструкциями
+└── writing-clearly/          # Папка со скиллом
+    ├── SKILL.md              # Основной файл (~60 строк)
+    │                         # Краткая памятка и workflow
+    └── references/
+        └── style-guide.md    # Подробные правила (~250 строк)
+                              # Таблицы замен, примеры, чек-лист
 ```
+
+**Важно:** При копировании в свой проект копируй только внутреннюю папку `writing-clearly/` (ту, что содержит `SKILL.md`).
 
 ### Формат Agent Skills
 
